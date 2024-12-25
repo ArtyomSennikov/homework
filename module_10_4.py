@@ -34,7 +34,6 @@
 # Далее выводится строка "<имя гостя из очереди> вышел(-ла) из очереди и сел(-а) за стол номер <номер стола>".
 # Потом запустить поток этого гостя (start).
 
-
 import threading
 import queue
 from time import sleep
@@ -49,7 +48,7 @@ class Table:
 
 class Guest(threading.Thread):
     def __init__(self, name):
-        super().__init__()
+        threading.Thread.__init__(self)
         self.name = name
 
     def run(self):
@@ -60,11 +59,13 @@ class Cafe:
     def __init__(self, *tables):
         self.queue = queue.Queue()
         self.tables = tables
+        self.visitors = 0
 
     def guest_arrival(self, *guests):
         for guest in guests:
             table = self.table_check()
             if table:
+                self.visitors += 1
                 table.guest = guest
                 guest.start()
                 print(f'{guest.name} сел(-а) за стол номер {table.number}.')
@@ -79,18 +80,19 @@ class Cafe:
 
 
     def discuss_guests(self):
-        while not self.queue.empty() and not Cafe.table_check(self):
+        while self.visitors:
             for table in self.tables:
                 if table.guest and not table.guest.is_alive():
                     print(f'{table.guest.name} покушал(-а) и ушёл(ушла).')
                     print(f'Стол номер {table.number} свободен.')
                     table.guest = None
+                    self.visitors -= 1
 
                 if not self.queue.empty() and table.guest is None:
                     table.guest = self.queue.get()
-                    print(f'{table.guest.name} вышел(-ла) из очереди и сел(-а) за стол номер {table.number}')
+                    self.visitors += 1
                     table.guest.start()
-
+                    print(f'{table.guest.name} вышел(-ла) из очереди и сел(-а) за стол номер {table.number}')
 
 
 # Создание столов
