@@ -1,0 +1,17 @@
+2025-01-18 22:44:36,581 | WARNING | Неверный тип данных для объекта Runner
+Traceback (most recent call last):
+  File "D:\Python_Projects\Module_12\Module_12_4\tests_12_4.py", line 46, in test_run
+    runner_ = rtwe.Runner('Name', 'Champion')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Python_Projects\Module_12\Module_12_4\rt_with_exceptions.py", line 8, in __init__
+    if speed > 0:
+       ^^^^^^^^^
+TypeError: '>' not supported between instances of 'str' and 'int'
+2025-01-18 22:44:36,583 | WARNING | Неверная скорость для Runner
+Traceback (most recent call last):
+  File "D:\Python_Projects\Module_12\Module_12_4\tests_12_4.py", line 36, in test_walk
+    walker_ = rtwe.Runner('Name', -5)
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Python_Projects\Module_12\Module_12_4\rt_with_exceptions.py", line 11, in __init__
+    raise ValueError(f'Скорость не может быть отрицательной, сейчас {speed}')
+ValueError: Скорость не может быть отрицательной, сейчас -5
